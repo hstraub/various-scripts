@@ -1,0 +1,50 @@
+#!/bin/bash
+# Copyright (C) 2009 Herbert Straub mail@straub.co.at
+# License: GNU/GPL Version 3
+# For details see: http://www.gnu.org/licenses/gpl.html
+
+if [ $# -ne "3" ]; then
+	echo $(basename $0) "snapshotcount sourcedir destinationdir"
+	cat <<NOWARRANTY
+
+THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
+EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
+PROVIDE THE PROGRAM “AS IS” WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE
+PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL
+NECESSARY SERVICING, REPAIR OR CORRECTION.
+
+NOWARRANTY
+	exit 1
+fi
+
+TIMESTAMP=$(date +"%Y-%m-%d_%H:%M:%S")
+SNAPSHOTDIR=${3}/snapshot_$TIMESTAMP
+CURRENTSNAPSHOT=$3/current_snapshot
+
+if [ ! -L $CURRENTSNAPSHOT ]; then
+	rsync -a $2/ $SNAPSHOTDIR
+else
+	rsync -a --delete --link-dest=$CURRENTSNAPSHOT \
+		$2/ $SNAPSHOTDIR
+	rm $CURRENTSNAPSHOT
+fi
+
+ln -s $SNAPSHOTDIR $CURRENTSNAPSHOT
+
+#Cleanup
+
+i=0
+for snap in `ls -d -1 $3/snapshot_*`; do
+	snaplist[$i]=$snap
+	let i=i+1
+done
+
+let purgecount=${#snaplist[@]}-$1
+i=0
+while  [ $i -lt $purgecount ]; do
+	echo "purging " ${snaplist[$i]}
+	rm -fR ${snaplist[$i]}
+	let i=i+1
+done

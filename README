@@ -1,0 +1,8 @@
+make_snapshot:
+==============
+
+Using rsync with symbol link to create snapshots of a source directory.
+You can specify the maximum snapshot count and run it as cronjob.
+Example: make_snapshot 50 sourcedir destinationdir
+
+http://www.linuxhacker.at
