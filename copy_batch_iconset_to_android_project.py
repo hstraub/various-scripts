@@ -7,11 +7,9 @@ import os, shutil, sys
 class IconCopy:
   def __init__( self, iconName, projectPath ):
     self.sizes = {
-      "drawable-ldpi" : "36x36",
-      "drawable-mdpi" : "48x48",
-      "drawable-hdpi" : "72x72",
-      "drawable-xhdpi" : "96x96",
-      "drawable-xxhdpi" : "144x144"
+      "drawable-mdpi" : "32x32",
+      "drawable-hdpi" : "48x48",
+      "drawable-xhdpi" : "64x64",
     }
     self.pngPrefix = "MENU-PNG"
     self.iconName = iconName

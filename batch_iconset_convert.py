@@ -31,6 +31,7 @@ def convertOneSVGFile( inputFile, outputFile ):
   color = svgElement.get( "fill" )
   svgElement.set( "fill", "#333333" )
   svgElement.set( "fill-opacity", "0.6" )
+  svgElement.set( "transform", "scale(0.75) translate(7,7)" )
 
   fh = open( outputFile, "w" ) 
   fh.write( lxml.etree.tostring( doc, pretty_print=True ) )
@@ -40,7 +41,7 @@ def convertOneSVGFile( inputFile, outputFile ):
 if __name__ == "__main__":
   svgInputDir = "SVG-ORIGINAL"
   svgOutputDir = "SVG-HOLO-LIGHT"
-  pngSizes = [ "18x18", "24x24", "36x36", "48x48" ]
+  pngSizes = [ "32x32", "48x48", "64x64" ]
 
   for pngSize in pngSizes:
     try:
